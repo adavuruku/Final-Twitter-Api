@@ -1,10 +1,20 @@
 class ApplicationController < ActionController::API
-    before_action :verifyLogin
+    before_action :verifyLogin, :verifyUserAdmin
     private
 
     def auth_header
         request.headers['Authorization']
     end
+
+    def verifyUserAdmin
+        user = UsersRecord.where("userid = :userid and admin = :admin", { userid: getUserId[0]['userId'], admin: true }).limit(1)
+        p user
+        if user.count <= 0
+            render json: {status:"error", code:401, message:"Only Admin Can Do This"}, status: :unauthorized
+        end
+    end
+
+
     def verifyLogin
         if auth_header
             authentication = auth_header.split(' ')[1]

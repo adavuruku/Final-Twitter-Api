@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_02_202924) do
+ActiveRecord::Schema.define(version: 2020_04_03_163142) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -56,6 +56,15 @@ ActiveRecord::Schema.define(version: 2020_04_02_202924) do
     t.index ["users_record_id"], name: "index_followings_on_users_record_id"
   end
 
+  create_table "retweets", force: :cascade do |t|
+    t.string "userid", null: false
+    t.bigint "users_record_id", null: false
+    t.integer "allretweet", array: true
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["users_record_id"], name: "index_retweets_on_users_record_id"
+  end
+
   create_table "tweets", force: :cascade do |t|
     t.text "tweetinfo", null: false
     t.string "userid", null: false
@@ -63,6 +72,7 @@ ActiveRecord::Schema.define(version: 2020_04_02_202924) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "likes", default: [], array: true
+    t.boolean "active", default: true
     t.index ["id", "users_record_id", "tweetinfo"], name: "tweets_list_index"
     t.index ["users_record_id"], name: "index_tweets_on_users_record_id"
   end
@@ -80,11 +90,14 @@ ActiveRecord::Schema.define(version: 2020_04_02_202924) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.date "dob"
+    t.boolean "admin", default: false
+    t.boolean "active", default: true
     t.index ["userid", "username", "useremail"], name: "userd_record_list_index", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "followers", "users_records"
   add_foreign_key "followings", "users_records"
+  add_foreign_key "retweets", "users_records"
   add_foreign_key "tweets", "users_records"
 end

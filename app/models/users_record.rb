@@ -2,6 +2,7 @@ class UsersRecord < ApplicationRecord
     has_one_attached :dp
     has_one_attached :coverPhoto
     has_many :tweets
+    has_many :retweets
     has_many :followings
     has_many :followers
     has_secure_password

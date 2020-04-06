@@ -296,7 +296,17 @@ class AccountController < ApplicationController
             render json: {error:"No Tweet"}, status: :ok
         end
     end
-
+    def AdminAllTweet
+        # current_page = params[:page] ? params[:page].to_i : 1
+        # recPerPage = 20
+        # recOffset = (current_page - 1) * recPerPage
+        # allTweets= Tweet.where('active = ?',true)
+        # tweets = Tweet.where('active = ?',true).limit(recPerPage).offset(recOffset).order(id: :desc)
+        # render json: {alltweets:tweets.as_json, page:current_page, totalTweets:allTweets.length}, status: :ok
+        allTweets= Tweet.where('active = ?',true).order(id: :desc)
+        # tweets = Tweet.where('active = ?',true).limit(recPerPage).offset(recOffset).order(id: :desc)
+        render json: {alltweets:allTweets.as_json(:include => [:users_record]), totalTweets:allTweets.length}, status: :ok
+    end
     def AdminCreateUser
         userName = params['userName']
         if VerifyValidUserName(userName)

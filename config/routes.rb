@@ -15,11 +15,15 @@ Rails.application.routes.draw do
   put '/updateProfile', :to=> 'account#updateProfile', as: 'updateProfile'
   get '/updatePassword', :to=> 'account#updatePassword', as: 'updatePassword'
   get '/removeFollow', :to=> 'account#unfollowing', as: 'removeFollow'
+  get '/suggestuser', :to=> 'account#suggestPeopleToFollow', as: 'suggestuser'
   get '/viewTweet', :to=> 'account#loadTweets', as: 'viewTweet'
 
   get '/allUsers', :to=> 'account#listAllUsers', as: 'allUsers'
   get '/likeTweet', :to=> 'account#AddLikesToTweet', as: 'likeTweet'
   get '/retweet', :to=> 'account#CreateRetweet', as: 'retweet'
+  
+
+  
 
   get '/adminremove', :to=> 'account#AdminDeleteUser', as: 'removeUser' # userId
   post '/adminnew', :to=> 'account#AdminCreateUser', as: 'adminCreate'

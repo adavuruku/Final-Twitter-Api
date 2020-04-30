@@ -1,7 +1,8 @@
 class AccountController < ApplicationController
     skip_before_action :verifyLogin, only: [:LoginUser, :CreateUser, :existingUserName, :ResetPassword]
+
     skip_before_action :verifyUserAdmin, only: [:LoginUser, :CreateUser, :existingUserName, :ResetPassword, 
-    :CreateRetweet, :AddLikesToTweet, :ResetPassword, :loadTweets, :CreateTweet, :updatePassword, :updateProfile, 
+    :CreateRetweet, :AddLikesToTweet, :ResetPassword, :loadTweets, :CreateTweet, :updatePassword, :updateProfile, :suggestPeopleToFollow,
     :viewProfile, :CreateFollowing, :Listfollowing, :unfollowing, :existingUserName, :listAllUsers, :AdminMakeAdmin]
     
     def CreateUser
@@ -81,6 +82,25 @@ class AccountController < ApplicationController
         render json: {following:following, message:"unfollowed"}, status: :ok
     end
 
+    def suggestPeopleToFollow
+        suggestFollow = [getUserId[0]['userId']]
+        following= Following.where("userid =:userId",{userId:getUserId[0]['userId']})
+        if following.count > 0
+            following.each do |eachUser|
+                suggestFollow.push(eachUser.followingid)
+            end
+        end
+        usersSuggest = UsersRecord.where.not(userid: suggestFollow)
+        usrsSuggestActive = usersSuggest.select{|eachPerson| eachPerson.active == true}
+        render json: {usersSuggest:usrsSuggestActive}, status: :ok
+
+        # Book.joins(:comments).where("comments.id = 2")
+        # Book.joins(:comments).where(comments: { id: 2 })
+        # Book.where(id: [1,2,3])
+        # Book.where(category: "Programming").or(Book.where(category: "Ruby"))
+        # Book.where.not(category: "Java")
+        # Book.where("LENGTH(title) > ?", params[:min_length])
+    end
     #################################################################################
     # Related Profile Actions                                                       #
     # - exisiting username                                                          #
@@ -109,6 +129,15 @@ class AccountController < ApplicationController
         showUser[:coverPhoto] = (user.coverPhoto.attached?) ? url_for(user.coverPhoto) : ""
         showUser[:followings] = user.followings.count
         showUser[:followers] = Following.where("followingId =:followingId",{followingId:getUserId[0]['userId']}).count
+        showUser[:tweets] = Tweet.where("userid =:userId",{userId:getUserId[0]['userId']}).count
+        allRetweet = Retweet.where("userid =:userId",{userId:getUserId[0]['userId']})
+
+        if allRetweet.count > 0
+            showUser[:retweets] = allRetweet[0].allretweet.count
+        end
+
+        # User.where("'Guest' = ANY(roles_array)")
+        # Book.where("subjects @> ?", "{Finance,Business,Accounting}")
         render json: showUser.as_json, status: :ok
     end
     def updateProfile
@@ -253,7 +282,6 @@ class AccountController < ApplicationController
         if retweetInfo.length > 0
             existingUsers = retweetInfo[0].allretweet.to_a
             if !(existingUsers.include? params[:tweetId].to_i)
-                p "eno  dey"
                 existingUsers.push(params[:tweetId])
                 retweetInfo[0].update_attribute(:allretweet, existingUsers)
             end

@@ -22,9 +22,6 @@ Rails.application.routes.draw do
   get '/likeTweet', :to=> 'account#AddLikesToTweet', as: 'likeTweet'
   get '/retweet', :to=> 'account#CreateRetweet', as: 'retweet'
   
-
-  
-
   get '/adminremove', :to=> 'account#AdminDeleteUser', as: 'removeUser' # userId
   post '/adminnew', :to=> 'account#AdminCreateUser', as: 'adminCreate'
   put '/adminedit', :to=> 'account#AdminEditUser', as: 'adminEdit'

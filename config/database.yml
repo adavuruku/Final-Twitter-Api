@@ -17,7 +17,7 @@ development:
   database: twitter
   pool: 5
   username: postgres
-  password: onize2019
+  password: admin
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".

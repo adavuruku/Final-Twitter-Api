@@ -71,7 +71,7 @@ GEM
     jbuilder (2.11.3)
       activesupport (>= 5.0.0)
     jwt (2.3.0)
-    loofah (2.12.0)
+    loofah (2.18.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.7.1)
@@ -82,9 +82,11 @@ GEM
     minitest (5.14.4)
     msgpack (1.4.2)
     nio4r (2.5.8)
-    nokogiri (1.12.5-x64-mingw32)
+    nokogiri (1.13.6-x64-mingw32)
       racc (~> 1.4)
-    nokogiri (1.12.5-x86-mingw32)
+    nokogiri (1.13.6-x86-mingw32)
+      racc (~> 1.4)
+    nokogiri (1.13.6-x86_64-linux)
       racc (~> 1.4)
     pg (1.2.3)
     puma (4.3.10)
@@ -113,7 +115,7 @@ GEM
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
       nokogiri (>= 1.6)
-    rails-html-sanitizer (1.4.2)
+    rails-html-sanitizer (1.4.3)
       loofah (~> 2.3)
     rails_12factor (0.0.3)
       rails_serve_static_assets
@@ -149,6 +151,7 @@ GEM
 PLATFORMS
   x64-mingw32
   x86-mingw32
+  x86_64-linux
 
 DEPENDENCIES
   bcrypt (~> 3.1.7)
